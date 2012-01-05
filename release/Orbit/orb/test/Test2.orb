@@ -1,6 +1,0 @@
-
-(module hello "This is hello variable from Test2")
-
-(module world
-    (function ()
-        (print "This is the world function from Test2")))
