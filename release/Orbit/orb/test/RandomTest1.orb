@@ -1,0 +1,10 @@
+/*
+(require z "Haha")
+(require m "Math")
+*/
+
+(require t "Test3")
+
+(print t)
+
+(print "global test   " hello)

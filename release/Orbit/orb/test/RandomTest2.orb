@@ -1,0 +1,227 @@
+/*
+(require z "Haha")
+(require m "Math")
+*/
+(var x 30)
+(var y 20)
+
+(print -2 )
+
+(end)
+
+(require m "Math")
+//(require z "Haha")
+
+// load an orb document
+(document g "test/Blah.html")
+(print g)
+
+(var r [45 x y 67])
+(print r)
+
+
+
+(var code ["+" x 3])
+(print code)
+(print (eval code))
+(print (list 34 45 x y))
+
+
+// base     evaled (get)
+// x        30
+// x.y      23
+
+
+(var s (lambda (x) (+ x 1 true)))
+(print "yoooo\"noooooo" (s 5))
+
+
+/* this is a comment
+block
+*/
+
+
+(var ttt
+    (for ((var i 5) (< i 10) (++ i))
+        (begin
+            (print "aaa " i)
+            (print "bbb " i)
+            
+            (begin
+                (print "   ppp " i)
+                (print "   qqq " i)
+                
+                (if (== i 8)
+                    (break "forbreaked!")
+                    (print "   rrr " i)
+                )
+            )
+            
+            (print "ccc " i)
+        )
+    )
+)
+
+(print "value of ttt is" ttt)
+
+(function add (a b)
+    (+ a b))
+
+
+(syntax sub (a b)
+    (print "inside subb!!!!!!!!!!!!!!   " arguments))
+
+(print "subbbbbbbb " (sub 10 2 4 5 x 7 8))
+
+(function fact (n)
+    (if (<= n 1)
+        1
+        (* n (fact (- n 1)))
+    )
+)
+
+(print "factorial 6" (fact 6))
+
+
+(for ((var i 5) (< i 10) (++ i))
+    (print (add 3 i))
+)
+
+
+
+(var h { var:1 bb:{ pp:x qq:y ff:(function (x y) (+ x y 2)) } cc:y })
+
+(print "print h: " h)
+(print "print h.bb:" h.bb)
+(print "print h.bb.pp:" h.bb.pp)
+(= h.bb.pp 3)
+(delete h.bb.pp)
+(print "print h.bb:" h.bb)
+(print "call h.bb.ff: " (call h.bb.ff '(3 4)))
+(print "call h.bb.ff: " (h.bb.ff 3 4))
+
+
+(var arr (new Array))
+
+(foreach (k v '(a b c))
+    (print "arrrrrrrrr" k " " v)
+)
+
+(print Math.PI (Math.sin 3.14))
+
+(var a '(1 2 3))
+(print "filter!!    " (filter (function (x) (== 0 (% x 2))) '(1 2 3 4 5 6)) )
+(print "fold!!      " (fold - 20 '(2 3 4)) )
+
+
+(function f (x) (begin (print "fff" x) (+ x 1)))
+(function g (x) (begin (print "ggg" x) (* x 2)))
+(function h (x) (begin (print "hhh" x) (- x 3)))
+
+(print "compose         "  (var y (compose f g h)))
+(print "compose y(10) = "  (f (g (h 10))))
+(print "compose y(10)!= "  (y 10))
+
+
+(var obj { a:"test" b:"yoyo" })
+(print "obj" obj)
+(set obj.c "keke")
+(print "obj" obj)
+(delete obj.b)
+(print "obj" obj)
+
+(print "x" x)
+(delete x)
+(print "x" x)
+
+(var x '(hihi blah m yoyo))
+(print x x.length)
+(x.push 'joe)
+(print x x.length)
+
+
+(var x 5)
+
+(print "switch test")
+
+(switch x
+    (case (1 2 5)
+        (print "1 2 5"))
+    (case (4 5 6)
+        (print "4 5 6"))
+    (case (7 8 9)
+        (print "7 8 9"))
+    (case (5 6 1)
+        (print "1 5 6"))
+    (case (4 3 6)
+        (print "4 3 6"))
+    (default
+        (print "default"))
+)
+
+(print "select test")
+
+(select x
+    (case (1 2 5)
+        (print "1 2 5"))
+    (case (4 5 6)
+        (print "4 5 6"))
+    (case (7 8 9)
+        (print "7 8 9"))
+    (case (5 6 1)
+        (print "1 5 6"))
+    (case (4 3 6)
+        (print "4 3 6"))
+    (default
+        (print "default"))
+)
+
+(print "for loop test")
+
+
+(for ((var i 5) (< i 10) (++ i))
+    (begin
+        (print "aaa" i)
+        (print "bbb" i)
+        (if (== i 8) (continue))
+        (print "ccc" i)
+    )
+)
+
+
+
+(print "list object test")
+
+(var obj (new List))
+(obj.add "haha")
+(obj.add "yoyo")
+(obj.add "gaga")
+(obj.add "tata")
+(obj.remove "gaga")
+(print "list" obj)
+
+(foreach (o obj)
+    (print "each" o)
+)
+
+
+
+(print "array object test")
+
+(var obj (new Array))
+(obj.push "haha")
+(obj.push "yoyo")
+(obj.push "gaga")
+(obj.push "tata")
+(print obj)
+(obj.remove "gaga")
+(print obj)
+(delete obj[1])
+(print obj)
+
+
+
+(begin
+    (+ 1 2)
+    (trace)
+)

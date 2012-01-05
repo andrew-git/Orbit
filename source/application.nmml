@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<!-- metadata, make sure 'package' is at least 2 segments (ie. com.myproject) -->
+	<app file="Orbit" title="Orbit" main="moonaire.orbit.OrbitNME" package="com.moonaire.orbit" 
+		version="1.0.0" company="Munir Hussin" />
+		
+	<!-- output -->
+	<window width="640" height="480" fps="60" orientation="portrait" resizable="true" />
+	<set name="BUILD_DIR" value="bin" />
+    <set name="SWF_VERSION" value="11" />
+	
+	<!-- classpath, haxe libs -->
+	<classpath name="src" />
+	<haxelib name="nme" />
+	
+	<!-- assets -->
+	<icon name="orb/nme.svg" />
+	<assets path="orb" include="*" exclude="nme.svg" />
+	
+	<!-- DLLs -->
+	<ndll name="std" />
+	<ndll name="regexp" />
+	<ndll name="zlib" />
+	<ndll name="nme" haxelib="nme" />
+	
+	<!-- Windows app: hide console -->
+	<!--<setenv name="no_console" value="1" />-->
+	<setenv name="no_console" value="0" />
+</project>

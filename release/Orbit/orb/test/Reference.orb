@@ -1,0 +1,396 @@
+
+/**
+ * Introducing Orbit, a New Lisp Based Scripting Language
+ */
+
+// commenting is the same as c-like languages
+/* block comment */
+// inline comment
+
+// in orbit, we write functions in a different way
+// instead of foo(a, b, c); we write (foo a b c)
+// notice commas and semicolon are not needed.
+
+// when we write (a b c d), the first parameter must
+// always evaluate into a function. the rest are
+// arguments to be passed in.
+
+
+// declaring a variable
+                                    // javascript/remarks
+(var x)                             // var x;
+(var y 10)                          // var y = 10;
+
+(set x 20)                          // x = 20;
+(= x 20)                            // x = 20;
+
+(print "The value of x is:" x)      // 20
+
+
+// basic functions (operators)
+
+(+ 1 2)                             // 1 + 2
+(= x (+ 1 2))                       // x = 1 + 2
+(print x)                           // 3
+
+(print (+ "hello" "world" x))       // you can also use + to concatenate strings
+
+
+// all operators available in java is available here
+// = + - * / % ~ & | ^ << >> >>> ++ -- += -= *= /=
+// %= &= |= ^= <<= >>= >>>= == != < > <= >= ? ! && ||
+
+(print (+ 1 2))
+(print (- 5 3))
+(print (* x y))
+(print (/ x y))
+
+(print (- 5))                       // the minus function with one parameter passed in is negation.
+(print -x)                          // synthetic sugar for negation. -x gets parsed into (- x)
+
+
+(begin                              // begin will evaluate a series of expression, and returns
+    (print "a")                     // what the last expression evaluates to
+    (print "b")                     // this is similar to blocks in c-like languages
+    (print "c")                     // ie. { print("a"); print("b"); print("c"); }
+)
+
+
+// arrays
+
+(print (+ 1 2))                     // (a b c) is really an array with 3 elements.
+(print '(+ 1 2))                    // the quote operator will prevent execution of the array, and returns
+                                    // the array directly. the quote symbol is synthetic sugar that expands
+(print (quote (+ 1 2)))             // to this longer version
+
+(set x 5)
+(print x)                           // prints 5
+(print 'x)                          // prints x. basically, quote prevents evaluation
+
+(var arr1 '(ant boy cat))           // you can create an array as such. none of the elements are evaluated.
+(var arr2 ["ant" "boy" "cat"])      // alternatively you can use [] to create the same array as the one before
+                                    // all elements here are evaluated.
+(var arr3 ['ant 'boy 'cat])         // quoting prevents evaluation, so this is also the same as above
+(var arr4 (array "ant" "boy" "cat"))    // the [...] is synthetic sugar for (array ...)
+
+(print arr2[1])                     // [] can also be used to index an array if it's right next to a variable
+(arr2.push "dog")                   // since arrays are objects, you can access it's inner methods and properties
+(arr2.shift)
+(print arr2)                        // ["boy" "cat" "dog"]
+
+
+// pairs
+
+x : y                               // pairs is an array which contains 2 elements. you use the colon operator.
+(+ 3 4) : (* 2 3)                   // you can also glue 2 structures together.
+                                    // a:b          evaluates into [a b]
+                                    // a:b:c        evaluates into [a [b c]]
+                                    // a:b:c:d:e    evaluates into [a [b [c [d e]]]]
+
+(print 'a:b:c:d:e)                  // you can see what it evaluates into.
+                                    // pairs are useful for grouping 2 items together.
+                                    // this is somewhat similar to cons cells in Lisp (a . b)
+                                    // but the infix colon syntax allows readability especially with tables
+
+
+// tables
+
+(print { a:5 b:"hello" })               // tables are a hashmap of key-value pairs. this syntax is synthetic sugar
+(print (table ['a 5] ['b "hello"]))     // for this more verbose statement. note that the keys are quoted (not evaluated)
+                                        // while the values are evaluated.
+(print (table [a 5] [b "hello"]))       // if you want the keys to also be evaluated, you have to use the table function
+
+(var cat                                // you can nest tables and arrays to create structured data.
+    {                                   // imo, this looks much cleaner than json structures or lua tables.
+        name: "Toby"                    // you don't have unnecessary commas and quotes all over the place.
+        age: 2
+        likes: ["sleep" "food"]
+        color:
+        {
+            red: 255
+            green: 128
+            blue: 64
+        }                               // you can use the "this" keyword in functions to refer to the parent structure
+        action: (function (verb noun) (print this.name verb noun))
+    }
+)
+
+(print cat.name)                        // you can access values using the dot infix operator
+(print cat.color.red)
+(set cat.color.red 64)                  // you can also assign values
+
+(print cat.color.red)
+(print cat["color" "red"])              // you can also use the array index operator
+(print cat["color"]["red"])             // also the same
+(print cat["color"].red)                // same... because they're all synthetic sugar for the index function.
+(print (index cat "color" "red"))       // this is what all of the above transforms into
+
+
+(cat.action "says" "MEOW!")             // you can also call functions within the structure
+
+(set cat.toy "ball")                    // you can add new properties into the structure
+(delete cat.toy)                        // and also remove properties
+
+
+
+
+
+// if statement
+
+(if (> x 10)                        // (if condition truepart falsepart)
+    (print "x > 10")                // the falsepart is optional
+    (print "x < 10")                // if will return a value, so it's similar to the ternary operator
+)                                   // x > 10 ? print("x > 10") : print("x < 10");
+
+(if (> x 10)                        // if you need more than 1 expression to be evaluated,
+    (begin                          // use begin
+        (print "begin a")
+        (print "begin b")
+        (print "begin c")
+    )
+)
+
+
+// cond statement
+
+(cond                               // (cond (test expr) (test expr) ... )
+    ((> x 40) (print "x > 40"))     // cond is like a series of if-else statements
+    ((> x 30) (print "x > 30"))     // the first match it finds, cond returns the
+    ((> x 20) (print "x > 20"))     // corresponding expression
+    ((> x 10)))                     // if the expression is omitted, it'll return
+                                    // the test result
+
+
+// functions
+
+(var add                            // functions are first-class
+    (function (a b)                 // you can create an anonymous function and assign it to a
+        (+ a b)                     // variable
+    )
+)
+
+(function add (a b)                 // you can also declare named variables (synthetic sugar)
+    (+ a b)
+)
+
+(var sub1 (lambda (x) (- x 1)))     // lambda is the same as an anonymous function
+
+(print (add x y))                   // when you call the function you defined, each argument
+                                    // will be evaluated before being passed into the function
+
+// you can also define functions where the arguments
+// are not evaluated before being passed in.
+// like the (if cond t f), t and f is not evaluated
+// depending on the value of cond
+
+(syntax iif (c t f)                 // in this example, you've defined a new function replicating
+    (if (eval c)                    // the if function. the args are not evaluated, and you need
+        (eval t)                    // to call on eval yourself
+        (eval f)
+    )
+)
+
+(syntax varArgTest ()               // for syntax, function, lambda, there are a few extra
+    (if (> arguments.length 3)      // variables passed in: arguments, environment
+        (begin                      // not yet implemented: this, super
+            (eval arguments[0])
+            (eval arguments[1])
+            (eval arguments[2])
+        )
+    )
+)
+
+
+// loading other modules
+
+(require "test/Test")               // this will load and execute test/Test.orb
+(require Test2a "test/Test2")       // you can load the module, and set it to a variable
+(require Test2b "test/Test2")       // note that if it's already loaded, it'll just return the module
+                                    // without executing it again
+(print (== Test2a Test2b))          // true -- the variables are both pointing to the same object
+
+(print (== modules["test/Test2"] Test2a)    // modules is a table. this also returns true
+                                            // modules contains all the tables loaded with require
+
+(document doc "test/Test")          // document parses the code, but does not execute it
+                                    // you can use this to load orbit-structured documents
+                                    // and manipulate the document.
+                                    // it is recommended to name orbit documents with a descriptive
+                                    // filename:
+                                    // eg, if it contains sprite data, name it Player.sprite.orb
+                                    // or if it contains orbit-formatted html, name it Page.html.orb
+                                    // or if it's a game level, name it Jungle01.level.orb
+                                    // for normal orbit script, just name it Script.orb
+                                    //
+                                    // this helps to see if the orb file contains code or data.
+(eval doc)                          // you can also evaluate this doc, or pass it into a function
+                                    // to process it.
+                                    //
+                                    // note that if you eval a document, the special module variable
+                                    // will point to THIS module. unlike the require function, documents
+                                    // aren't cached, and each time you call document, it'll open the file
+                                    // and parse it.
+
+
+// accessing variables from other modules
+
+(print module.hello)                // module is a special variable that refers to the current module
+                                    // it is like the "this" keyword but refers to module
+
+(module hi "hi there")              // you can also call module as a function. this acts like the var keyword
+                                    // so you can define module-level variables.
+                                    // var only defines local-level variables.
+                                    // this is the opposite from lua, where undeclared variables are
+                                    // module-level, while those declared with local arent.
+                                    // this forces you to decide what variables you want exposed, and
+                                    // prevents accidentally creating module variables which wont get
+                                    // garbage collected, unless the module is unloaded
+
+(print Test2a.hello)                // here, we're accessing module variable hello from the Test2 module
+
+(set module.hello "hi there")       // since module is a table, this is an alternate way of setting it
+
+(unrequire "test/Test")             // you can also unload a module
+
+(var whazzap "local var")
+(module whazzap "module var")
+(global whazzap "WHAZZAP")          // similar to module, you can also define global variables and functions.
+                                    // to access module-level variable in another module, you need to require
+                                    // it with a variable name.
+                                    // however, to access global-level variable, you can access it directly
+                                    // in any other modules without calling require.
+                                    
+(print whazzap)                     // note that this prints "local var" since it's the innermost scope
+(print module.whazzap)              // this prints "module var"
+(print global.whazzap)              // this prints "WHAZZAP"
+
+(delete whazzap)                    // delete local variable
+(delete module.whazzap)             // delete module variable
+
+(print whazzap)                     // now this prints the global variable "WHAZZAP"
+
+
+// advanced functions
+
+(var in [1 2 3 4 5 6 7 8 9])                        // create an array
+
+(function even (x) (== 0 (% x 2)))                  // here, we define a few functions
+(function plus1 (x) (+ x 1))
+(function times3 (x) (* x 3))
+(function div2 (x) (/ x 2))
+
+(var y (compose div2 times3 plus1))                 // compose returns a new composite function
+                                                    // (compose f g h) ==> (function (x) (f (g (h x))))
+(print (y 3))                                       // prints: 6
+
+(print (map (compose times3 plus1 plus1) in))       // map applies a function to a list of args, and returns an
+                                                    // array of the results
+                                                    // eg. (map + [1 2 3] [6 7 8]) ==> [(+ 1 6) (+ 2 7) (+ 3 8)]
+
+(print (filter even in))                            // filter takes a function and an array, and returns a new filtered array
+                                                    // prints: [2 4 6 8]
+
+(print (fold + 5 in))                               // fold takes a function, initial value, an array, and chains the
+                                                    // function call to each item in the array
+                                                    // (fold + 5 [1 2 3]) ==> 5 + 1 + 2 + 3
+                                                    // (fold f x [a b c]) ==> f( f( f(x, a), b) c);
+
+// control flow
+
+(for ((var i 0) (< i 10) (++ i))                    // the traditional for-loop is available
+    (print i)
+)
+
+(var arr ["abc" "def" "ghi" "jkl"])
+(var obj {a:"abc" b:"def" c:"ghi" d:"jkl"})
+
+(foreach (v arr) (print v))                         // foreach (v obj) and foreach(k v obj)
+(foreach (k v arr) (print k v))
+(foreach (k obj) (print k))                         // it works for arrays, objects, tables, and other iterables
+(foreach (k v obj) (print k v))                     // note that key-value iteration does not work for iterators
+
+(= i 0)
+(while (< i 10)                                     // while loop.
+    (begin
+        (print i)
+        (++ i)
+    )
+)
+
+(= i 0)
+(do                                                 // do loop.
+    (begin                                          // note the usage of (begin ...) if you want to execute
+        (print i)                                   // multiple functions.
+        (++ i)                                      // (begin ...) is equivalent to the curly brackets { ... }
+    )                                               // in c-like languages
+    (< i 10)
+)
+
+
+// switch case and select case are both implemented. note the differences in behavior
+
+// (switch x
+//     (case (test1 test2 test3) expr)
+//     (case (test1 test2 test3) expr)
+//     (case (test1 test2 test3) expr)
+//     (default expr))
+// switch will execute the expression of the FIRST match, and returns.
+
+// (select x
+//     (case (test1 test2 test3) expr)
+//     (case (test1 test2 test3) expr)
+//     (case (test1 test2 test3) expr)
+//     (default expr))
+// select will execute the expression of all matches, and returns the value of the last expression.
+
+
+// manipulating program flow using continue break, end, return, exit
+
+(for ((var i 0) (< i 10) (++ i))
+    (begin
+        (if (= i 3) (continue))         // continue will break out to the nearest loop, and then resumes the next iteration
+        (if (= i 7) (break))            // break will break out of the nearest loop.
+        (if (= i 9) (break 3))          // you can also pass a value in break, and the loop will return that value.
+        (print i)                       // this is something to take note. even "for" is a function that can return
+    )                                   // a value! you can also pass a value in continue.
+)
+
+(begin                                  // end will break out of the nearest "begin".
+    (print "a")                         // just like break, you can optionally return a value
+    (print "b")
+    (end)                               // (end 4) also works, and (begin) returns 4.
+    (print "c")
+)
+
+(print "d")                             // note that modules have an implicit begin. so you can
+// (end)                                // return from a module by calling end.
+(print "e")                             // if end is uncommented, the rest of the file wont be executed
+
+
+(function doStuff ()                    // just like break and end, return works the same way
+    (begin                              // and it breaks out of the nearest function
+        (print "x")
+        (print "x")
+        (return "x")
+        (print "x")
+    )
+)
+
+
+// (exit 0)                             // lastly, exit will break out of everything lol
+// (gc)                                 // you can also call gc to force garbage collection
+
+
+// objects
+
+(var mylist (new List))                 // orbit allows you to bind to external classes
+(mylist.add "test1")                    // and you can instantiate them with the new keyword
+(mylist.add "test2")                    // what classes are available depends on the program
+(print mylist)
+
+// there are plans to provide orbit-based classes, but this hasn't been done yet.
+// actually, due to the flexibility of orbit, you can implement it using orbit itself
+// using the syntax function!
+
+
+

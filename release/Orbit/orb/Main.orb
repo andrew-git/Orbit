@@ -1,0 +1,26 @@
+
+(print "Main module")
+
+// load module
+(require Animal "Animal")
+
+// access module variable
+(var cat Animal.kitty)
+
+(print "Printing cat name:" cat.name)
+(cat.action "says" "MEOW!")
+
+// load document
+(document doc "Animal")
+
+// this is how the document looks like
+(print doc)
+
+// you can then transform the document by traversing its data structure
+
+// change "Toby" to "Garfield"
+(set doc[2 2 1 1] '"Garfield")
+
+// evaluate the document
+(eval doc)
+(print kitty.name)
