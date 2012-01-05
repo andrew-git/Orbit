@@ -7,9 +7,9 @@ package moonaire.orbit;
 
 class Function 
 {
-    public var f:Array<Dynamic>->Environment->Dynamic;
+    public var f:Array<Dynamic>->Environment->Dynamic->Dynamic;
     
-    public function new(fn:Array<Dynamic>->Environment->Dynamic)
+    public function new(fn:Array<Dynamic>->Environment->Dynamic->Dynamic)
     {
         f = fn;
     }

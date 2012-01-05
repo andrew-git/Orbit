@@ -28,7 +28,7 @@ class Core
         
         // (require module)
         // (require symbol module)
-        g.defineSyntax("require", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("require", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var module:Dynamic = null;
             
@@ -55,7 +55,7 @@ class Core
         });
         
         // (unrequire module)
-        g.defineSyntax("unrequire", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("unrequire", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var a0:Dynamic = orbit.eval(a[0], e);
             return orbit.unrequire(a0);
@@ -63,7 +63,7 @@ class Core
         
         // (document file)
         // (document symbol file)
-        g.defineSyntax("document", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("document", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var module:Dynamic = null;
             
@@ -91,7 +91,7 @@ class Core
         });
         
         // (gc)
-        g.defineSyntax("gc", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("gc", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             #if nme
                 System.gc();
@@ -101,7 +101,7 @@ class Core
         });
         
         // (trace)
-        g.defineSyntax("trace", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("trace", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.print("Begin Trace");
             e.trace();
@@ -109,7 +109,7 @@ class Core
         });
         
         // (print a b c)
-        g.defineSyntax("print", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("print", function (a:Array<Dynamic>, e:Environment, o:Dynamic):Dynamic
         {
             var i:Int = 0;
             var n:Int = a.length;
@@ -126,7 +126,7 @@ class Core
         });
         
         // (println a b c)
-        g.defineSyntax("println", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("println", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var i:Int = 1;
             var n:Int = a.length;
@@ -145,7 +145,7 @@ class Core
         });
         
         // (eval expr)
-        g.defineSyntax("eval", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("eval", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var expr = orbit.eval(a[0], e);
             return orbit.eval(expr, e);
@@ -154,13 +154,13 @@ class Core
         g.defineVariable("read", orbit.read);
         
         // (syntax (a b) body) or (syntax name (a b) body)
-        g.defineSyntax("syntax", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("syntax", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             return orbit.lambda(a, e, false);
         });
         
         // (function (a b) body) or (function name (a b) body)
-        g.defineSyntax("function", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("function", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             return orbit.lambda(a, e, true);
         });
@@ -169,7 +169,7 @@ class Core
         
         
         // (compose f g h i)  ==> function (x) { return f(g(h(i(x)))); }  ==> (function () (f (g (h (i x))))
-        g.defineSyntax("compose", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("compose", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             
@@ -214,7 +214,7 @@ class Core
         });
         
         // (map fn list1 list2 list3)  eg: (map add '(1 2 3) '(4 5 6) '(7 8)) => add(1, 4), add(2, 5), add(3, 6)
-        g.defineSyntax("map", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("map", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             
@@ -257,7 +257,7 @@ class Core
         });
         
         // (filter fn list)       eg: (filter (function (x) (== 0 (% x 2))) '(1 2 3 4 5 6))
-        g.defineSyntax("filter", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("filter", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             
@@ -288,7 +288,7 @@ class Core
         
         
         // (fold fn init args)       eg: (fold + 5 '(1 2 3))
-        g.defineSyntax("fold", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("fold", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             

@@ -13,13 +13,13 @@ class Bitwise
     public static function init(orbit:Orbit, g:Environment)
     {
         // (~ a)
-        g.defineSyntax("~", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("~", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             return ~orbit.eval(a[0], e);
         });
         
         // (& a b c d)
-        g.defineSyntax("&", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("&", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             var ret:Dynamic = a[0] & a[1];
@@ -28,7 +28,7 @@ class Bitwise
         });
         
         // (| a b c d)
-        g.defineSyntax("|", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("|", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             var ret:Dynamic = a[0] | a[1];
@@ -37,7 +37,7 @@ class Bitwise
         });
         
         // (^ a b c d)
-        g.defineSyntax("^", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("^", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             var ret:Dynamic = a[0] ^ a[1];
@@ -46,7 +46,7 @@ class Bitwise
         });
         
         // (<< a b c d)
-        g.defineSyntax("<<", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("<<", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             var ret:Dynamic = a[0] << a[1];
@@ -55,7 +55,7 @@ class Bitwise
         });
         
         // (>> a b c d)
-        g.defineSyntax(">>", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax(">>", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             var ret:Dynamic = a[0] >> a[1];
@@ -64,7 +64,7 @@ class Bitwise
         });
         
         // (>>> a b c d)
-        g.defineSyntax(">>>", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax(">>>", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             var ret:Dynamic = a[0] >>> a[1];

@@ -29,7 +29,7 @@ class Objects
         
         
         // (new x a b c) === new x(a, b, c)
-        g.defineSyntax("new", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("new", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var a0:Dynamic = a[0];
             var ax:Dynamic = orbit.eval(a0, e);
@@ -63,21 +63,21 @@ class Objects
         });
         
         // (array a b c d e)
-        g.defineSyntax("array", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("array", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             return a;
         });
         
         // (list a b c d e)
-        g.defineSyntax("list", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("list", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             return Lambda.list(a);
         });
         
         // (table (a b) (c d) (e f))
-        g.defineSyntax("table", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("table", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var hash:Hash<Dynamic> = new Hash<Dynamic>();
             var i:Int = 0;

@@ -13,7 +13,7 @@ class Comparison
     public static function init(orbit:Orbit, g:Environment)
     {
         // (== a b c true false 0)
-        g.defineSyntax("==", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("==", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             // short-circuiting
             var a0:Dynamic = orbit.eval(a[0], e);
@@ -27,7 +27,7 @@ class Comparison
         });
         
         // (!= a b c true false 0)
-        g.defineSyntax("!=", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("!=", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             // short-circuiting
             var a0:Dynamic = orbit.eval(a[0], e);
@@ -41,7 +41,7 @@ class Comparison
         });
         
         // (< 1 4 3 7) === 1 < 4 < 3 < 7
-        g.defineSyntax("<", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("<", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             // short-circuiting
             var al:Dynamic = orbit.eval(a[0], e);
@@ -57,7 +57,7 @@ class Comparison
         });
         
         // (> 1 4 3 7) === 1 > 4 > 3 > 7
-        g.defineSyntax(">", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax(">", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             // short-circuiting
             var al:Dynamic = orbit.eval(a[0], e);
@@ -73,7 +73,7 @@ class Comparison
         });
         
         // (<= 1 4 3 7) === 1 <= 4 <= 3 <= 7
-        g.defineSyntax("<=", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("<=", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             // short-circuiting
             var al:Dynamic = orbit.eval(a[0], e);
@@ -89,7 +89,7 @@ class Comparison
         });
         
         // (>= 1 4 3 7) === 1 >= 4 >= 3 >= 7
-        g.defineSyntax(">=", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax(">=", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             // short-circuiting
             var al:Dynamic = orbit.eval(a[0], e);

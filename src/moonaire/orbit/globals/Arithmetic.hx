@@ -13,7 +13,7 @@ class Arithmetic
     public static function init(orbit:Orbit, g:Environment)
     {
         // (+ a b c d)
-        g.defineSyntax("+", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("+", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var isStr:Bool = false;
             var i:Int = 0;
@@ -41,7 +41,7 @@ class Arithmetic
         });
         
         // (- a b c d)
-        g.defineSyntax("-", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("-", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             if (a.length == 1) return -a[0];
@@ -51,7 +51,7 @@ class Arithmetic
         });
         
         // (* a b c d)
-        g.defineSyntax("*", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("*", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             var ret:Dynamic = a[0] * a[1];
@@ -60,7 +60,7 @@ class Arithmetic
         });
         
         // (/ a b c d)
-        g.defineSyntax("/", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("/", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             var ret:Dynamic = a[0] / a[1];
@@ -69,7 +69,7 @@ class Arithmetic
         });
         
         // (% a b c d)
-        g.defineSyntax("%", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("%", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             orbit.evalEach(a, e);
             var ret:Dynamic = a[0] % a[1];
@@ -78,7 +78,7 @@ class Arithmetic
         });
         
         // (++ a)  ===>   (= a (+ a 1))
-        g.defineSyntax("++", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("++", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var x:Dynamic = orbit.eval(a[0], e);
             orbit.eval(["=", a[0], ++x], e);
@@ -86,7 +86,7 @@ class Arithmetic
         });
         
         // (-- a)  ===>   (= a (+ a 1))
-        g.defineSyntax("--", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("--", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var x:Dynamic = orbit.eval(a[0], e);
             orbit.eval(["=", a[0], --x], e);
@@ -100,7 +100,7 @@ class Arithmetic
         for (op in ops)
         {
             // (+= a b)  ===>   (= a (+ a b))
-            g.defineSyntax(op + "=", function (a:Array<Dynamic>, e:Environment):Dynamic
+            g.defineSyntax(op + "=", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
             {
                 // get the first arg
                 var a0:Dynamic = a[0];

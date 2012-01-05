@@ -25,7 +25,7 @@ class Logical
         });
         
         // (&& a b c true false 0)
-        g.defineSyntax("&&", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("&&", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var i:Int = 0;
             var n:Int = a.length;
@@ -43,7 +43,7 @@ class Logical
         });
         
         // (|| a b c true false 0)
-        g.defineSyntax("||", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("||", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var i:Int = 0;
             var n:Int = a.length;

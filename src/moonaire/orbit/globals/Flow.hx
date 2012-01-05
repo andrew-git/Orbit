@@ -19,7 +19,7 @@ class Flow
     public static function init(orbit:Orbit, g:Environment)
     {
         // (continue) or (continue arg)
-        g.defineSyntax("continue", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("continue", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var ret:Dynamic = (a.length > 0) ? orbit.eval(a[0], e) : null;
             
@@ -42,7 +42,7 @@ class Flow
         });
         
         // (break) or (break arg)
-        g.defineSyntax("break", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("break", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var ret:Dynamic = (a.length > 0) ? orbit.eval(a[0], e) : null;
             
@@ -66,7 +66,7 @@ class Flow
         });
         
         // (return) or (return arg)
-        g.defineSyntax("return", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("return", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var ret:Dynamic = (a.length > 0) ? orbit.eval(a[0], e) : null;
             
@@ -84,7 +84,7 @@ class Flow
         });
         
         // (end) or (end arg)
-        g.defineSyntax("end", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("end", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var ret:Dynamic = (a.length > 0) ? orbit.eval(a[0], e) : null;
             
@@ -107,7 +107,7 @@ class Flow
         });
         
         // (exit) or (exit arg)
-        g.defineSyntax("exit", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("exit", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var ret:Dynamic = (a.length > 0) ? orbit.eval(a[0], e) : 0;
             
@@ -133,7 +133,7 @@ class Flow
         });
         
         // (for (init cond next) expr)
-        g.defineSyntax("for", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("for", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var args:Array<Dynamic> = a[0];
             var expr:Array<Dynamic> = a[1];
@@ -162,7 +162,7 @@ class Flow
         });
         
         // (foreach (obj iter) expr)    or      (foreach (key value iter) expr)
-        g.defineSyntax("foreach", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("foreach", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var args:Array<Dynamic> = a[0];
             var expr:Array<Dynamic> = a[1];
@@ -206,9 +206,9 @@ class Flow
                 
                 if (args.length == 2)
                 {
-                    for (o in array)
+                    for (v in array)
                     {
-                        env.set(value, o);                  // update the variable so it can be accessed in script
+                        env.set(value, v);                  // update the variable so it can be accessed in script
                         ret = orbit.eval(expr, env);        // evaluate the expression
                         if (env.hasReturned) break;
                     }
@@ -234,9 +234,9 @@ class Flow
                 
                 if (args.length == 2)
                 {
-                    for (o in hash)
+                    for (v in hash)
                     {
-                        env.set(value, o);                  // update the variable so it can be accessed in script
+                        env.set(value, v);                  // update the variable so it can be accessed in script
                         ret = orbit.eval(expr, env);        // evaluate the expression
                         if (env.hasReturned) break;
                     }
@@ -258,9 +258,9 @@ class Flow
                 {
                     var it:Iterable<Dynamic> = iter;
                     
-                    for (o in it)
+                    for (v in it)
                     {
-                        env.set(value, o);                  // update the variable so it can be accessed in script
+                        env.set(value, v);                  // update the variable so it can be accessed in script
                         ret = orbit.eval(expr, env);        // evaluate the expression
                         if (env.hasReturned) break;
                     }
@@ -309,7 +309,7 @@ class Flow
         });
         
         // (while cond expr)
-        g.defineSyntax("while", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("while", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var cond:Dynamic = a[0];
             var expr:Dynamic = a[1];
@@ -330,7 +330,7 @@ class Flow
         });
         
         // (do expr cond)
-        g.defineSyntax("do", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("do", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var expr:Dynamic = a[0];
             var cond:Dynamic = a[1];
@@ -353,7 +353,7 @@ class Flow
         
         // (cond  (test expr) (test expr) )
         // if expr is missing, returns test
-        g.defineSyntax("cond", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("cond", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var i:Int = 0;
             var n:Int = a.length;
@@ -386,7 +386,7 @@ class Flow
         //     (default expr))
         // select will execute the expression of all matches, and returns the value of the last expression.
         // compare switch
-        g.defineSyntax("select", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("select", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var x = orbit.eval(a[0], e);
             
@@ -460,7 +460,7 @@ class Flow
         //     (default expr))
         // switch will execute the expression of the FIRST match, and returns.
         // compare select
-        g.defineSyntax("switch", function (a:Array<Dynamic>, e:Environment):Dynamic
+        g.defineSyntax("switch", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             var x = orbit.eval(a[0], e);
             

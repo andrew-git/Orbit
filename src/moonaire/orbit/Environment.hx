@@ -156,7 +156,7 @@ class Environment
         symbols.set(key, value);
     }
     
-    public function defineSyntax(key:String, value:Array<Dynamic>->Environment->Dynamic):Void
+    public function defineSyntax(key:String, value:Array<Dynamic>->Environment->Dynamic->Dynamic):Void
     {
         var f:Function = new Function(value);
         symbols.set(key, f);
