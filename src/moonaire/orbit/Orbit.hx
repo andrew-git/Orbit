@@ -33,7 +33,6 @@ using StringTools;
 
 class Orbit 
 {
-    public static var classpath:String = "orb/";
     private static inline var CHAR_DOUBLE_QUOTE:Int = '"'.fastCodeAt(0);
     private static inline var CHAR_LCASE_M:Int = "m".fastCodeAt(0);
     private static inline var CHAR_LCASE_G:Int = "g".fastCodeAt(0);
@@ -41,9 +40,11 @@ class Orbit
     //private var parser:Parser;
     public var global:Environment;
     public var modules:Hash<Dynamic>;
+    public var classpaths:Array<String>;
     
     public function new() 
     {
+        classpaths = new Array<String>();
         modules = new Hash<Dynamic>();
         Environment.createGlobal(this);
         Parser.init(this);
@@ -79,12 +80,14 @@ class Orbit
         #end
     }
     
-    public function bind(c:Class<Dynamic>, as:String):Void
+    public function bind(c:Class<Dynamic>, as:String, ?isGlobal:Bool = false):Void
     {
         // bind a class to the script
         // the script will be able to have access to the class
         // and able to instantiate objects with it
         modules.set(as, c);
+        
+        if (isGlobal) global.set(as, c);
     }
     
     
@@ -99,7 +102,7 @@ class Orbit
         }
         else
         {
-            var parser:Parser = Parser.load(classpath + module + ".orb");
+            var parser:Parser = Parser.load(module + ".orb");
             
             if (parser != null)
             {
@@ -132,7 +135,7 @@ class Orbit
     
     public function document(doc:String):Dynamic
     {
-        var parser:Parser = Parser.load(classpath + doc + ".orb");
+        var parser:Parser = Parser.load(doc + ".orb");
         
         if (parser != null)
         {
@@ -161,15 +164,12 @@ class Orbit
         
         if (Std.is(a0, String))
         {
-            name = a[0];
-            args = a[1];
-            expr = a[2];
+            name = a.shift();
         }
-        else
-        {
-            args = a[0];
-            expr = a[1];
-        }
+        
+        args = a.shift();
+        a.unshift("begin");
+        expr = a;
         
         f = function(a0:Array<Dynamic>, e0:Environment, obj:Dynamic):Dynamic
         {
@@ -178,6 +178,7 @@ class Orbit
             
             // add magic variables which can be accessed within the function
             var env:Environment = new Environment(this, e, args, a0);
+            
             env.name = "@function";
             env.type = Environment.TYPE_FUNCTION;
             env.defineVariable("arguments", a0);
@@ -663,6 +664,7 @@ class Orbit
         else if (Reflect.isObject(obj))
         {
             fn = Reflect.field(obj, prop);
+            //if (Std.is(obj, Class)) obj = null;
         }
         else
         {

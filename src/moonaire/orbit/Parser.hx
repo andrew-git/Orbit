@@ -57,6 +57,7 @@ class Parser
     private static inline var CHAR_UCASE_Z:Int = "Z".fastCodeAt(0);
     private static inline var CHAR_LCASE_A:Int = "a".fastCodeAt(0);
     private static inline var CHAR_LCASE_Z:Int = "z".fastCodeAt(0);
+    private static inline var CHAR_LCASE_X:Int = "x".fastCodeAt(0);
     private static inline var CHAR_NUM_0:Int = "0".fastCodeAt(0);
     private static inline var CHAR_NUM_9:Int = "9".fastCodeAt(0);
     private static inline var CHAR_UNDERSCORE:Int = "_".fastCodeAt(0);
@@ -123,13 +124,32 @@ class Parser
     // load code from a file
     public static function load(file:String):Parser
     {
-        #if nme
-            var data:String = Assets.getText(file);
-        #elseif cpp
-            var data:String = File.getContent(file);
-        #end
+        var data:String;
+        var fullFileName:String;
+        var cp:String;
+        var i:Int = orbit.classpaths.length;
         
-        return data == null ? null : new Parser(data, file);
+        // go in reverse order
+        while (--i >= 0)
+        {
+            cp = orbit.classpaths[i];
+            fullFileName = cp + file;
+            
+            #if nme
+                data = Assets.getText(fullFileName);
+            #elseif cpp
+                data = File.getContent(fullFileName);
+            #end
+            
+            if (data != null)
+            {
+                return new Parser(data, fullFileName);
+            }
+        }
+        
+        // can't find file
+        orbit.print("Error: Can't find file: " + file);
+        return null;
     }
     
     // read code from a string
@@ -547,7 +567,11 @@ class Parser
                 // we have the symbol
                 symbol = data.substr(start, pos - start);
                 
-                if (symbol.indexOf(".") >= 0 || symbol.charAt(-1) == "f")
+                if (symbol.indexOf("x") >= 0)
+                {
+                    return Std.parseInt(symbol);
+                }
+                else if (symbol.indexOf(".") >= 0 || symbol.charAt(-1) == "f")
                 {
                     return Std.parseFloat(symbol);
                 }

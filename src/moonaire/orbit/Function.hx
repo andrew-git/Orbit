@@ -26,4 +26,26 @@ class Function
         }
     }
     
+    public static function define(f:Dynamic):Void
+    {
+        
+    }
+    
+    public static function apply(o:Dynamic, f:Dynamic, a:Array<Dynamic>, e:Environment):Dynamic
+    {
+        // if it's a function, call the function
+        if (Std.is(f, Function))
+        {
+            var fn:Function = f;
+            return fn.call(o, a, e);
+        }
+        // if it's a haxe function, call the haxe function
+        else if (Reflect.isFunction(f))
+        {
+           return Reflect.callMethod(o, f, a);
+        }
+        
+        return null;
+    }
+    
 }

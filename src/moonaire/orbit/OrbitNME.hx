@@ -17,6 +17,7 @@ class OrbitNME
 	public static function main() 
 	{
 		var orbit:Orbit = new Orbit();
+        orbit.classpaths.push("orb/");
         orbit.require("Main");
 	}
 	

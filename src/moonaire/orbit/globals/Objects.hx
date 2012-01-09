@@ -31,7 +31,7 @@ class Objects
         // (new x a b c) === new x(a, b, c)
         g.defineSyntax("new", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
-            var a0:Dynamic = a[0];
+            var a0:Dynamic = a[0];                  // x
             var ax:Dynamic = orbit.eval(a0, e);
             var cl:Class<Dynamic>;
             
@@ -45,6 +45,7 @@ class Objects
             {
                 // prepare args
                 a.shift();
+                orbit.evalEach(a, e);
                 
                 // instantiate
                 var obj:Dynamic = Type.createInstance(cl, a);

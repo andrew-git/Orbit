@@ -3,6 +3,7 @@ package moonaire.orbit.globals;
 import moonaire.orbit.Environment;
 import moonaire.orbit.Function;
 import moonaire.orbit.Orbit;
+import nme.events.Event;
 
 #if nme
     import nme.system.System;
@@ -163,6 +164,58 @@ class Core
         g.defineSyntax("function", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
         {
             return orbit.lambda(a, e, true);
+        });
+        
+        // (procedure (a b) body) or (procedure name (a b) body)
+        g.defineSyntax("procedure", function (a:Array<Dynamic>, e:Environment, o:Environment):Dynamic
+        {
+            var a0:Dynamic = a[0];
+            var args:Array<Dynamic>;
+            var name:String = null;
+            var expr:Dynamic;
+            
+            if (Std.is(a0, String))
+            {
+                name = a.shift();
+            }
+            
+            args = a.shift();
+            a.unshift("begin");
+            expr = a;
+            
+            var f:Dynamic = function(?a00:Dynamic, ?a01:Dynamic, ?a02:Dynamic, ?a03:Dynamic, ?a04:Dynamic, ?a05:Dynamic, ?a06:Dynamic, ?a07:Dynamic, ?a08:Dynamic, ?a09:Dynamic, ?a10:Dynamic, ?a11:Dynamic, ?a12:Dynamic)
+            {
+                var vals:Array<Dynamic> = new Array<Dynamic>();
+                if (a00 != null) vals.push(a00);
+                if (a01 != null) vals.push(a01);
+                if (a02 != null) vals.push(a02);
+                if (a03 != null) vals.push(a03);
+                if (a04 != null) vals.push(a04);
+                if (a05 != null) vals.push(a05);
+                if (a06 != null) vals.push(a06);
+                if (a07 != null) vals.push(a07);
+                if (a08 != null) vals.push(a08);
+                if (a09 != null) vals.push(a09);
+                if (a10 != null) vals.push(a10);
+                if (a11 != null) vals.push(a11);
+                if (a12 != null) vals.push(a12);
+                
+                var env:Environment = new Environment(orbit, e, args, vals, "@function");
+                orbit.eval(expr, env);
+            };
+            
+            if (name != null)
+            {
+                var def:Array<Dynamic> = new Array<Dynamic>();
+                def.push("var");
+                def.push(name);
+                def.push(f);
+                return orbit.eval(def, e);
+            }
+            else
+            {
+                return f;
+            }
         });
         
         g.defineAlias("lambda", "function");
