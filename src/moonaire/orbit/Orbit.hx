@@ -428,10 +428,33 @@ class Orbit
                 if (Std.is(f, Array))
                 {
                     var arr:Array<Dynamic> = f;
+                    var first:String = arr[0];
                     
-                    if (arr[0] == "index")
+                    if (first == "index")
                     {
                         return evalIndexCall(arr, env, args);
+                    }
+                    else if (first == "module" || first == "global")    // ([module function] name a b c) ([module var] name args)
+                    {
+                        var second:String = arr[1];
+                        
+                        if (second == "function")
+                        {
+                            var name:String = args[0];          // args: (name a b c)
+                            args[0] = second;                   // args: (function a b c)
+                            
+                            // get the environment
+                            var hash:Hash<Dynamic> = env.get(first);
+                            var expr:Dynamic = eval(args, env);
+                            
+                            hash.set(name, expr);
+                            return expr;
+                        }
+                        else if (second == "var")
+                        {
+                            a[0] = "module";
+                            return eval(a, env);
+                        }
                     }
                 }
                 
